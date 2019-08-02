@@ -13,17 +13,22 @@ def to_vector(texto,model):
     return vec / np.linalg.norm(vec) # divides the vector by their normal
 
 embedding_location = r'../../models/embeddings/waiting_list_corpus.vec'
+interim_train_text_location = r'../../data/interim/train_text.txt'
+interim_test_text_location = r'../../data/interim/test_text.txt'
+processed_train_text_location = r'../../data/processed/train_text.npy'
+processed_test_text_location = r'../../data/processed/test_text.npy'
+
 embedding = gensim.models.KeyedVectors.load_word2vec_format( # loading word embeddings
     embedding_location, # using the spanish billion words embeddings
     binary=False # the model is in binary format
 )
 train_sentences = []
-with open(r'../../data/interim/train_text.txt', encoding='utf-8') as file:
+with open(interim_train_text_location, encoding='utf-8') as file:
     for line in file:
         line = line.rstrip()
         train_sentences.append(line)
 test_sentences = []
-with open(r'../../data/interim/test_text.txt', encoding='utf-8') as file:
+with open(interim_test_text_location, encoding='utf-8') as file:
     for line in file:
         line = line.rstrip()
         test_sentences.append(line)
@@ -50,5 +55,5 @@ for i,sentence in enumerate(test_sentences):
     test_matrix[i,] = vector
 print(train_matrix.shape)
 print(test_matrix.shape)
-np.save(r'../../data/processed/train_text.npy', train_matrix)
-np.save(r'../../data/processed/test_text.npy', test_matrix)
+np.save(processed_train_text_location, train_matrix)
+np.save(processed_test_text_location, test_matrix)
