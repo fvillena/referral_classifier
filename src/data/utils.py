@@ -1,5 +1,5 @@
 import re
-def normalizer(text, remove_tildes = False): #normalizes a given string to lowercase and changes all vowels to their base form
+def normalizer(text, remove_tildes = True): #normalizes a given string to lowercase and changes all vowels to their base form
     text = text.lower() #string lowering
     text = re.sub(r'[^A-Za-zñáéíóú]', ' ', text) #replaces every punctuation with a space
     if remove_tildes:
