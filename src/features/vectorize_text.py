@@ -30,8 +30,8 @@ embedding_location = r'../../models/embeddings/corpus_words_no_punct_multi_line.
 # interim_test_text_location = r'../../data/interim/test_text.txt'
 # processed_train_text_location = r'../../data/processed/train_text_biomedical_corpus.npy'
 # processed_test_text_location = r'../../data/processed/test_text_biomedical_corpus.npy'
-interim_texts_location = r'../../data/interim/texts.txt'
-processed_texts_location = r'../../data/processed/texts_SBW-vectors-300-min5.npy'
+interim_texts_location = r'../../data/interim/texts_unique.txt'
+processed_texts_location = r'../../data/processed/texts_unique__averaging__corpus_words_no_punct_multi_line.npy'
 
 embedding = gensim.models.KeyedVectors.load_word2vec_format( # loading word embeddings
     embedding_location, # using the spanish billion words embeddings

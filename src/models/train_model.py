@@ -8,7 +8,7 @@ import json
 np.random.seed(11)
 
 # serialized_model_file = '../../models/serialized_models/lr_corpus_words_no_punct_multi_line.joblib'
-performance_file = '../../models/model_performances/lr_SBW-vectors-300-min5.json'
+performance_file = '../../models/model_performances/lr__averaging__corpus_words_no_punct_multi_line_ap_dd_fc_nc.json'
 
 # train_texts_location = '../../data/processed/train_text_biomedical_corpus.npy'
 # train_ages_location = '../../data/processed/train_age.txt'
@@ -17,7 +17,7 @@ performance_file = '../../models/model_performances/lr_SBW-vectors-300-min5.json
 # test_ages_location = '../../data/processed/test_age.txt'
 # test_labels_location = '../../data/processed/test_labels.txt'
 
-texts_location = '../../data/processed/texts_SBW-vectors-300-min5.npy'
+texts_location = '../../data/processed/texts__averaging__corpus_words_no_punct_multi_line_ap_dd_fc_nc.npy'
 ages_location = '../../data/processed/ages.txt'
 labels_location = '../../data/processed/labels.txt'
 # train_labels_location = '../../data/processed/train_labels.txt'
