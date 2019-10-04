@@ -8,7 +8,7 @@ import json
 
 models = [
     sklearn.linear_model.LogisticRegression(solver='lbfgs'),
-    sklearn.svm.SVC(),
+    sklearn.svm.SVC(gamma='scale'),
     sklearn.ensemble.RandomForestClassifier(),
     sklearn.neural_network.MLPClassifier()
 ]
@@ -43,5 +43,7 @@ class GesModelTrainer:
             features = self.train[:,:-1]
             labels = self.train[:,-1]
             self.scores[clf_name] = sklearn.model_selection.cross_validate(clf,features,labels,n_jobs=4,scoring=['f1_weighted','recall_weighted'],verbose=2,cv=10)
-
+    def generate_report(self,report_location):
+        with open(report_location, 'w', encoding='utf-8') as json_file:
+            json.dump(self.scores, json_file, indent=2, ensure_ascii=False)
 

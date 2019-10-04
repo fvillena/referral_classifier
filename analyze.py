@@ -1,6 +1,7 @@
 from src.data.text_data import CorpusGenerator
 from src.data.ges_data import GesDatasetGenerator
 from src.features.text_embedding import TextVectorizer
+from src.models.ges_classifier import GesModelTrainer
 import os
 
 corpus_generator = CorpusGenerator('data/raw/waiting_list_corpus_raw/','Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
@@ -19,3 +20,7 @@ os.system('bash src/models/compute_embeddings.sh')
 vectorizer = TextVectorizer('models/embeddings.vec','data/interim/train_text.txt','data/interim/test_text.txt')
 vectorizer.vectorize_text()
 vectorizer.write_data('data/processed/')
+
+trainer = GesModelTrainer('data/processed/train_text.npy','data/processed/train_age.txt','data/processed/train_labels.txt')
+trainer.train_models()
+trainer.generate_report('reports/scores.json')
