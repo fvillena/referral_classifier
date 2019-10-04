@@ -7,7 +7,7 @@ import numpy as np
 import json
 
 models = [
-    sklearn.linear_model.LogisticRegression(),
+    sklearn.linear_model.LogisticRegression(solver='lbfgs'),
     sklearn.svm.SVC(),
     sklearn.ensemble.RandomForestClassifier(),
     sklearn.neural_network.MLPClassifier()
@@ -37,10 +37,11 @@ class GesModelTrainer:
         self.train = np.concatenate([self.train_texts, self.train_ages, self.train_labels], axis=1)
     def train_models(self):
         self.scores = {}
-        clf = self.models[0]
-        clf_name = clf.__class__.__name__
-        features = self.train[:,:-1]
-        labels = self.train[:,-1]
-        self.scores[clf_name] = sklearn.model_selection.cross_validate(clf,features,labels,n_jobs=4,scoring=['f1_weighted','recall_weighted'],verbose=2)
+        for model in self.models:
+            clf = model
+            clf_name = clf.__class__.__name__
+            features = self.train[:,:-1]
+            labels = self.train[:,-1]
+            self.scores[clf_name] = sklearn.model_selection.cross_validate(clf,features,labels,n_jobs=4,scoring=['f1_weighted','recall_weighted'],verbose=2,cv=10)
 
 
