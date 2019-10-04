@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import seaborn as sns
 import datetime as dt
 import nltk
 import sklearn.preprocessing
