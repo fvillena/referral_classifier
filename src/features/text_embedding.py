@@ -8,7 +8,7 @@ def to_vector(texto,model,idf):
     tokens = texto.split() # splits the text by space and returns a list of words
     vec = np.zeros(300) # creates an empty vector of 300 dimensions
     for word in tokens: # iterates over the sentence
-        if word in model: # checks if the word is both in the word embedding and the tf-idf model
+        if (word in model) & (word in idf): # checks if the word is both in the word embedding and the tf-idf model
             vec += model[word]*idf[word] # adds every word embedding to the vector
     if np.linalg.norm(vec) > 0:
         return vec / np.linalg.norm(vec) # divides the vector by their normal
