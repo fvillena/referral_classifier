@@ -16,6 +16,6 @@ ges_generator.write_dataset('data/processed/','data/interim/')
 
 os.system('bash src/models/compute_embeddings.sh')
 
-vectorizer = TextVectorizer('models/embeddings.vec','data/interim/train_text.txt','test_text.txt')
+vectorizer = TextVectorizer('models/embeddings.vec','data/interim/train_text.txt','data/interim/test_text.txt')
 vectorizer.vectorize_text()
 vectorizer.write_data('data/processed/')
