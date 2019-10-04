@@ -58,6 +58,6 @@ class CorpusGenerator:
                 line = ' '.join(sentence)
                 self.corpus.append(line)
     def write_corpus(self,corpus_location):
-        with open(corpus_location, encoding='utf-8') as f:
+        with open(corpus_location, mode='w', encoding='utf-8') as f:
             for item in self.corpus:
                 f.write("%s\n" % item)
