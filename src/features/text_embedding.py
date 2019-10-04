@@ -54,5 +54,5 @@ class TextVectorizer:
             vector = to_vector(sentence,self.embedding,self.idf)
             self.test_matrix[i,] = vector
     def write_data(self,vectorized_text_location):
-        np.save(vectorized_text_location + 'train_text.txt', self.train_matrix)
-        np.save(vectorized_text_location + 'test_text.txt', self.test_matrix)
+        np.save(vectorized_text_location + 'train_text.npy', self.train_matrix)
+        np.save(vectorized_text_location + 'test_text.npy', self.test_matrix)
