@@ -36,16 +36,11 @@ class GesModelTrainer:
         self.train_labels = np.asarray([self.train_labels]).T
         self.train = np.concatenate([self.train_texts, self.train_ages, self.train_labels], axis=1)
     def train_models(self):
-        self.predictions = {}
-        cv = sklearn.model_selection.KFold(n_splits=10,random_state=11)
+        self.scores = {}
         clf = self.models[0]
         clf_name = clf.__class__.__name__
-        self.predictions[clf_name] = []
         features = self.train[:,:-1]
         labels = self.train[:,-1]
-        for train_index, test_index in cv.split(features):
-            clf.fit(features[train_index], labels[train_index])
-            predicted = clf.predict(features[test_index])
-            self.predictions[clf_name].append((labels,predicted))
+        self.scores[clf_name] = sklearn.model_selection.cross_validate(clf,features,labels,n_jobs=4,scoring=['f1_weighted','recall_weighted'],verbose=2)
 
 
