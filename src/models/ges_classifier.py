@@ -63,7 +63,7 @@ class GesModelTrainer:
                 verbose=2,
                 random_state=11,
                 return_train_score=True,
-                cv=3
+                cv=10
             )
             grid_search.fit(features,labels)
             self.scores[model_name] = [grid_search.cv_results_,grid_search.best_params_,grid_search.best_score_]
