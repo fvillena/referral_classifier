@@ -58,7 +58,7 @@ class GesModelTrainer:
             grid_search = sklearn.model_selection.RandomizedSearchCV(
                 estimator=estimator,
                 param_distributions=grid,
-                scoring=['accuracy','f1_weighted','precision_weighted','recall_weighted','roc_auc'],
+                scoring='roc_auc',
                 n_jobs=n_jobs,
                 verbose=2,
                 random_state=11,
