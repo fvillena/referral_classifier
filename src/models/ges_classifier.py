@@ -68,6 +68,7 @@ class GesModelTrainer:
             grid_search.fit(features,labels)
             self.scores[model_name] = [grid_search.cv_results_,grid_search.best_params_,grid_search.best_score_]
     def generate_report(self,report_location):
-        with open(report_location, 'w', encoding='utf-8') as json_file:
-            json.dump(self.scores, json_file, indent=2, ensure_ascii=False, cls=NumpyEncoder)
+        for key,val in self.scores.items():
+            with open(report_location + key, 'w', encoding='utf-8') as json_file:
+                json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NumpyEncoder)
 

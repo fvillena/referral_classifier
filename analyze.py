@@ -23,4 +23,4 @@ vectorizer.write_data('data/processed/')
 
 trainer = GesModelTrainer('data/processed/train_text.npy','data/processed/train_age.txt','data/processed/train_labels.txt')
 trainer.train_models()
-trainer.generate_report('reports/scores.json')
+trainer.generate_report('reports/grid_search/')
