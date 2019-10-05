@@ -7,13 +7,25 @@ import numpy as np
 import json
 
 models = [
-    sklearn.linear_model.LogisticRegression(),
+    (
+        sklearn.linear_model.LogisticRegression(),
+        {
+            "C":np.logspace(-3,3,7),
+            "penalty":["l1","l2"]
+        }
+    ),
     # sklearn.svm.SVC(),
-    sklearn.ensemble.RandomForestClassifier(),
-    sklearn.neural_network.MLPClassifier()
+    # sklearn.ensemble.RandomForestClassifier(),
+    # sklearn.neural_network.MLPClassifier()
 ]
 
 np.random.seed(11)
+
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj): # pylint: disable=E0202
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 class GesModelTrainer:
     def __init__(self, train_texts, train_ages, train_labels, models = models):
@@ -38,12 +50,24 @@ class GesModelTrainer:
     def train_models(self,n_jobs=4):
         self.scores = {}
         for model in self.models:
-            clf = model
-            clf_name = clf.__class__.__name__
+            model_name = model[0].__class__.__name__
+            estimator = model[0]
+            grid = model[1]
             features = self.train[:,:-1]
             labels = self.train[:,-1]
-            self.scores[clf_name] = sklearn.model_selection.cross_validate(clf,features,labels,n_jobs=n_jobs,scoring=['f1_weighted','recall_weighted'],verbose=2,cv=10)
+            grid_search = sklearn.model_selection.RandomizedSearchCV(
+                estimator=estimator,
+                param_distributions=grid,
+                scoring=['accuracy','f1_weighted','precision_weighted','recall_weighted','roc_auc'],
+                n_jobs=n_jobs,
+                verbose=2,
+                random_state=11,
+                return_train_score=True,
+                cv=3
+            )
+            grid_search.fit(features,labels)
+            self.scores[model_name] = [grid_search.cv_results_,grid_search.best_params_,grid_search.best_score_]
     def generate_report(self,report_location):
         with open(report_location, 'w', encoding='utf-8') as json_file:
-            json.dump(self.scores, json_file, indent=2, ensure_ascii=False)
+            json.dump(self.scores, json_file, indent=2, ensure_ascii=False, cls=NumpyEncoder)
 
