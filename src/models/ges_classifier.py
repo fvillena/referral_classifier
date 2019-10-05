@@ -7,8 +7,8 @@ import numpy as np
 import json
 
 models = [
-    sklearn.linear_model.LogisticRegression(solver='lbfgs'),
-    sklearn.svm.SVC(gamma='scale'),
+    sklearn.linear_model.LogisticRegression(),
+    # sklearn.svm.SVC(),
     sklearn.ensemble.RandomForestClassifier(),
     sklearn.neural_network.MLPClassifier()
 ]
