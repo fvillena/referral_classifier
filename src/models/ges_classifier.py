@@ -10,7 +10,7 @@ models = [
     (
         sklearn.linear_model.LogisticRegression(),
         {
-            "C":np.logspace(-3,3,7),
+            "C":np.logspace(-5,5,11),
             "penalty":["l1","l2"]
         }
     ),
