@@ -7,13 +7,13 @@ import numpy as np
 import json
 
 models = [
-    (
-        sklearn.linear_model.LogisticRegression(),
-        {
-            "C":np.logspace(-5,5,11),
-            "penalty":["l1","l2"]
-        }
-    ),
+    # (
+    #     sklearn.linear_model.LogisticRegression(),
+    #     {
+    #         "C":np.logspace(-5,5,11),
+    #         "penalty":["l1","l2"]
+    #     }
+    # ),
     # sklearn.svm.SVC(),
     (
         sklearn.ensemble.RandomForestClassifier(),
