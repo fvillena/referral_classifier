@@ -29,22 +29,27 @@ models = [
     (
         sklearn.neural_network.MLPClassifier(),
         {
-            'solver': ['lbfgs'], 
-            'max_iter': [1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000 ], 
-            'alpha': 10.0 ** -np.arange(1, 10), 
-            'hidden_layer_sizes':np.arange(10, 15), 
-            'random_state':[0,1,2,3,4,5,6,7,8,9]
+            'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
+            'activation': ['tanh', 'relu'],
+            'solver': ['sgd', 'adam'],
+            'alpha': [0.0001, 0.05],
+            'learning_rate': ['constant','adaptive'],
         }
     )
 ]
 
 np.random.seed(11)
 
-class NumpyEncoder(json.JSONEncoder):
+class NpEncoder(json.JSONEncoder):
     def default(self, obj): # pylint: disable=E0202
-        if isinstance(obj, np.ndarray):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
             return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
+        else:
+            return super(NpEncoder, self).default(obj)
 
 class GesModelTrainer:
     def __init__(self, train_texts, train_ages, train_labels, models = models):
@@ -89,5 +94,5 @@ class GesModelTrainer:
     def generate_report(self,report_location):
         for key,val in self.scores.items():
             with open(report_location + key + '.json', 'w', encoding='utf-8') as json_file:
-                json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NumpyEncoder)
+                json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
 
