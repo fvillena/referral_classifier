@@ -14,7 +14,14 @@ models = [
     #         "penalty":["l1","l2"]
     #     }
     # ),
-    # sklearn.svm.SVC(),
+    (
+        sklearn.svm.SVC(),
+        {
+            'C':[1,10,100,1000],
+            'gamma':[1,0.1,0.001,0.0001], 
+            'kernel':['linear','rbf']
+        }
+    ),
     # (
     #     sklearn.ensemble.RandomForestClassifier(),
     #     {
@@ -26,16 +33,16 @@ models = [
     #         'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
     #     }
     # ),
-    (
-        sklearn.neural_network.MLPClassifier(),
-        {
-            'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
-            'activation': ['tanh', 'relu'],
-            'solver': ['sgd', 'adam'],
-            'alpha': [0.0001, 0.05],
-            'learning_rate': ['constant','adaptive'],
-        }
-    )
+    # (
+    #     sklearn.neural_network.MLPClassifier(),
+    #     {
+    #         'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
+    #         'activation': ['tanh', 'relu'],
+    #         'solver': ['sgd', 'adam'],
+    #         'alpha': [0.0001, 0.05],
+    #         'learning_rate': ['constant','adaptive'],
+    #     }
+    # )
 ]
 
 np.random.seed(11)
