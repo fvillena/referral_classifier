@@ -15,18 +15,27 @@ models = [
     #     }
     # ),
     # sklearn.svm.SVC(),
+    # (
+    #     sklearn.ensemble.RandomForestClassifier(),
+    #     {
+    #         'bootstrap': [True, False],
+    #         'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, None],
+    #         'max_features': ['auto', 'sqrt'],
+    #         'min_samples_leaf': [1, 2, 4],
+    #         'min_samples_split': [2, 5, 10],
+    #         'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+    #     }
+    # ),
     (
-        sklearn.ensemble.RandomForestClassifier(),
+        sklearn.neural_network.MLPClassifier(),
         {
-            'bootstrap': [True, False],
-            'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, None],
-            'max_features': ['auto', 'sqrt'],
-            'min_samples_leaf': [1, 2, 4],
-            'min_samples_split': [2, 5, 10],
-            'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+            'solver': ['lbfgs'], 
+            'max_iter': [1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000 ], 
+            'alpha': 10.0 ** -np.arange(1, 10), 
+            'hidden_layer_sizes':np.arange(10, 15), 
+            'random_state':[0,1,2,3,4,5,6,7,8,9]
         }
-    ),
-    # sklearn.neural_network.MLPClassifier()
+    )
 ]
 
 np.random.seed(11)
@@ -79,6 +88,6 @@ class GesModelTrainer:
             self.scores[model_name] = [grid_search.cv_results_,grid_search.best_params_,grid_search.best_score_]
     def generate_report(self,report_location):
         for key,val in self.scores.items():
-            with open(report_location + key, 'w', encoding='utf-8') as json_file:
+            with open(report_location + key + '.json', 'w', encoding='utf-8') as json_file:
                 json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NumpyEncoder)
 
