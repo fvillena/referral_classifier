@@ -125,6 +125,6 @@ class GesModelTrainer:
         #     with open(report_location + 'grid_search' + key + '.json', 'w', encoding='utf-8') as json_file:
         #         json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
         for key,val in self.cv_scores.items():
-            with open(report_location + 'cross_val' + key + '.json', 'w', encoding='utf-8') as json_file:
+            with open(report_location + 'cross_val/' + key + '.json', 'w', encoding='utf-8') as json_file:
                 json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
 
