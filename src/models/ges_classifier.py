@@ -7,13 +7,13 @@ import numpy as np
 import json
 
 models = [
-    (
-        sklearn.linear_model.LogisticRegression(),
-        {
-            "C":np.logspace(-5,5,11),
-            "penalty":["l1","l2"]
-        }
-    ),
+    # (
+    #     sklearn.linear_model.LogisticRegression(),
+    #     {
+    #         "C":np.logspace(-5,5,11),
+    #         "penalty":["l1","l2"]
+    #     }
+    # ),
     # (
     #     sklearn.svm.SVC(),
     #     {
@@ -22,17 +22,17 @@ models = [
     #         'kernel':['linear','rbf']
     #     }
     # ),
-    # (
-    #     sklearn.ensemble.RandomForestClassifier(),
-    #     {
-    #         'bootstrap': [True, False],
-    #         'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, None],
-    #         'max_features': ['auto', 'sqrt'],
-    #         'min_samples_leaf': [1, 2, 4],
-    #         'min_samples_split': [2, 5, 10],
-    #         'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
-    #     }
-    # ),
+    (
+        sklearn.ensemble.RandomForestClassifier(),
+        {
+            'bootstrap': [True, False],
+            'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, None],
+            'max_features': ['auto', 'sqrt'],
+            'min_samples_leaf': [1, 2, 4],
+            'min_samples_split': [2, 5, 10],
+            'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+        }
+    ),
     # (
     #     sklearn.neural_network.MLPClassifier(),
     #     {
