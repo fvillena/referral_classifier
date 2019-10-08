@@ -7,21 +7,21 @@ import numpy as np
 import json
 
 models = [
-    # (
-    #     sklearn.linear_model.LogisticRegression(),
-    #     {
-    #         "C":np.logspace(-5,5,11),
-    #         "penalty":["l1","l2"]
-    #     }
-    # ),
     (
-        sklearn.svm.SVC(),
+        sklearn.linear_model.LogisticRegression(),
         {
-            'C':[1,10,100,1000],
-            'gamma':[1,0.1,0.001,0.0001], 
-            'kernel':['linear','rbf']
+            "C":np.logspace(-5,5,11),
+            "penalty":["l1","l2"]
         }
     ),
+    # (
+    #     sklearn.svm.SVC(),
+    #     {
+    #         'C':[1,10,100,1000],
+    #         'gamma':[1,0.1,0.001,0.0001], 
+    #         'kernel':['linear','rbf']
+    #     }
+    # ),
     # (
     #     sklearn.ensemble.RandomForestClassifier(),
     #     {
@@ -78,8 +78,8 @@ class GesModelTrainer:
                     self.train_labels.append(False)
         self.train_labels = np.asarray([self.train_labels]).T
         self.train = np.concatenate([self.train_texts, self.train_ages, self.train_labels], axis=1)
-    def train_models(self,n_jobs=4):
-        self.scores = {}
+    def grid_search(self,n_jobs=4):
+        self.gs_scores = {}
         for model in self.models:
             model_name = model[0].__class__.__name__
             estimator = model[0]
@@ -97,9 +97,34 @@ class GesModelTrainer:
                 cv=3
             )
             grid_search.fit(features,labels)
-            self.scores[model_name] = [grid_search.cv_results_,grid_search.best_params_,grid_search.best_score_]
+            self.gs_scores[model_name] = [grid_search.cv_results_,grid_search.best_params_,grid_search.best_score_]
+    def train_models(self, grid_search_results_location,n_jobs):
+        self.cv_scores = {}
+        for model in self.models:
+            model_name = model[0].__class__.__name__
+            estimator = model[0]
+            with open(grid_search_results_location + model_name + '.json', "r") as read_file:
+                data = json.load(read_file)
+            best_hp=data[1]
+            estimator.set_params(**best_hp)
+            features = self.train[:,:-1]
+            labels = self.train[:,-1]
+            cv_scores = sklearn.model_selection.cross_validate(
+                estimator=estimator,
+                X=features,
+                y=labels,
+                cv=10,
+                n_jobs=n_jobs,
+                scoring=['accuracy','f1_weighted', 'precision_weighted', 'recall_weighted', 'roc_auc'],
+                verbose=2,
+                return_train_score=True
+            )
+            self.cv_scores[model_name] = cv_scores
     def generate_report(self,report_location):
-        for key,val in self.scores.items():
-            with open(report_location + key + '.json', 'w', encoding='utf-8') as json_file:
+        # for key,val in self.gs_scores.items():
+        #     with open(report_location + 'grid_search' + key + '.json', 'w', encoding='utf-8') as json_file:
+        #         json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
+        for key,val in self.cv_scores.items():
+            with open(report_location + 'cross_val' + key + '.json', 'w', encoding='utf-8') as json_file:
                 json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
 
