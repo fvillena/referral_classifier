@@ -14,25 +14,25 @@ models = [
     #         "penalty":["l1","l2"]
     #     }
     # ),
-    (
-        sklearn.svm.SVC(),
-        {
-            'C':[1,10,100,1000],
-            'gamma':[1,0.1,0.001,0.0001], 
-            'kernel':['linear','rbf']
-        }
-    ),
     # (
-    #     sklearn.ensemble.RandomForestClassifier(),
+    #     sklearn.svm.SVC(),
     #     {
-    #         'bootstrap': [True, False],
-    #         'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, None],
-    #         'max_features': ['auto', 'sqrt'],
-    #         'min_samples_leaf': [1, 2, 4],
-    #         'min_samples_split': [2, 5, 10],
-    #         'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+    #         'C':[1,10,100,1000],
+    #         'gamma':[1,0.1,0.001,0.0001], 
+    #         'kernel':['linear','rbf']
     #     }
     # ),
+    (
+        sklearn.ensemble.RandomForestClassifier(),
+        {
+            'bootstrap': [True, False],
+            'max_depth': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, None],
+            'max_features': ['auto', 'sqrt'],
+            'min_samples_leaf': [1, 2, 4],
+            'min_samples_split': [2, 5, 10],
+            'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+        }
+    ),
     # (
     #     sklearn.neural_network.MLPClassifier(),
     #     {
