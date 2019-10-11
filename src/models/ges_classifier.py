@@ -45,6 +45,16 @@ models = [
     )
 ]
 
+best_estimator = sklearn.ensemble.RandomForestClassifier()
+best_hp = {
+    "n_estimators": 1600,
+    "min_samples_split": 5,
+    "min_samples_leaf": 4,
+    "max_features": "auto",
+    "max_depth": 100,
+    "bootstrap": True
+}
+
 np.random.seed(11)
 
 class NpEncoder(json.JSONEncoder):
@@ -120,6 +130,35 @@ class GesModelTrainer:
                 return_train_score=True
             )
             self.cv_scores[model_name] = cv_scores
+    def train_best_model(self,test_texts, test_ages, test_labels,results_location,best_estimator=best_estimator,best_hp=best_hp,n_jobs=-1):
+        self.test_texts = np.load(test_texts)
+        self.test_ages = []
+        with open(test_ages, encoding='utf-8') as file:
+            for line in file:
+                line = line.rstrip()
+                self.test_ages.append(float(line))
+        self.test_ages = np.asarray([self.test_ages]).T
+        self.test_labels = []
+        with open(test_labels, encoding='utf-8') as file:
+            for line in file:
+                line = line.rstrip()
+                if line == 'True':
+                    self.test_labels.append(True)
+                else:
+                    self.test_labels.append(False)
+        self.test_labels = np.asarray([self.test_labels]).T
+        self.test = np.concatenate([self.test_texts, self.test_ages, self.test_labels], axis=1)
+        features_train = self.train[:,:-1]
+        labels_train = self.train[:,-1]
+        features_test = self.test[:,:-1]
+        labels_test = self.test[:,-1]
+        estimator = best_estimator
+        estimator.set_params(**best_hp,n_jobs=n_jobs)
+        estimator.fit(features_train,labels_train)
+        predictions_class = estimator.predict(features_test)
+        predictions_probs = estimator.predict_proba(features_test)
+        self.best_results = np.concatenate([labels_test,predictions_class,predictions_probs], axis=1)
+        np.savetxt(results_location,self.best_results)
     def generate_report(self,report_location):
         for key,val in self.gs_scores.items():
             with open(report_location + 'grid_search' + key + '.json', 'w', encoding='utf-8') as json_file:
