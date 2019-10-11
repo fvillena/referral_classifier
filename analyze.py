@@ -4,6 +4,7 @@ from src.features.text_embedding import TextVectorizer
 from src.models.ges_classifier import GesModelTrainer
 from src.visualization.grid_search_viz import GridSearchVisualizer
 from src.visualization.cross_val_viz import CrossValVisualizer
+from src.visualization.roc_curve import RocCurve
 from src.models.validation import StatisticalAnalysis
 from src.models.validation import Performance
 import os
@@ -46,4 +47,7 @@ trainer.train_best_model('data/processed/test_text.npy','data/processed/test_age
 
 best_model_performance = Performance('reports/best_model_results.txt')
 best_model_performance.analyze()
-best_model_performance.generate_report('reports/best_model_performance.json') 
+best_model_performance.generate_report('reports/best_model_performance.json')
+
+rock = RocCurve('reports/best_model_performance.json')
+rock.plot('reports/figures/roc_curve.pdf')
