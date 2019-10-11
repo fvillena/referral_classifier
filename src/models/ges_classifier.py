@@ -7,21 +7,21 @@ import numpy as np
 import json
 
 models = [
-    # (
-    #     sklearn.linear_model.LogisticRegression(),
-    #     {
-    #         "C":np.logspace(-5,5,11),
-    #         "penalty":["l1","l2"]
-    #     }
-    # ),
-    # (
-    #     sklearn.svm.SVC(),
-    #     {
-    #         'C':[1,10,100,1000],
-    #         'gamma':[1,0.1,0.001,0.0001], 
-    #         'kernel':['linear','rbf']
-    #     }
-    # ),
+    (
+        sklearn.linear_model.LogisticRegression(),
+        {
+            "C":np.logspace(-5,5,11),
+            "penalty":["l1","l2"]
+        }
+    ),
+    (
+        sklearn.svm.SVC(),
+        {
+            'C':[1,10,100,1000],
+            'gamma':[1,0.1,0.001,0.0001], 
+            'kernel':['linear','rbf']
+        }
+    ),
     (
         sklearn.ensemble.RandomForestClassifier(),
         {
@@ -33,16 +33,16 @@ models = [
             'n_estimators': [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
         }
     ),
-    # (
-    #     sklearn.neural_network.MLPClassifier(),
-    #     {
-    #         'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
-    #         'activation': ['tanh', 'relu'],
-    #         'solver': ['sgd', 'adam'],
-    #         'alpha': [0.0001, 0.05],
-    #         'learning_rate': ['constant','adaptive'],
-    #     }
-    # )
+    (
+        sklearn.neural_network.MLPClassifier(),
+        {
+            'hidden_layer_sizes': [(50,50,50), (50,100,50), (100,)],
+            'activation': ['tanh', 'relu'],
+            'solver': ['sgd', 'adam'],
+            'alpha': [0.0001, 0.05],
+            'learning_rate': ['constant','adaptive'],
+        }
+    )
 ]
 
 np.random.seed(11)
@@ -121,9 +121,9 @@ class GesModelTrainer:
             )
             self.cv_scores[model_name] = cv_scores
     def generate_report(self,report_location):
-        # for key,val in self.gs_scores.items():
-        #     with open(report_location + 'grid_search' + key + '.json', 'w', encoding='utf-8') as json_file:
-        #         json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
+        for key,val in self.gs_scores.items():
+            with open(report_location + 'grid_search' + key + '.json', 'w', encoding='utf-8') as json_file:
+                json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
         for key,val in self.cv_scores.items():
             with open(report_location + 'cross_val/' + key + '.json', 'w', encoding='utf-8') as json_file:
                 json.dump(val, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
