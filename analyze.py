@@ -2,8 +2,8 @@ from src.data.text_data import CorpusGenerator
 from src.data.ges_data import GesDatasetGenerator
 from src.features.text_embedding import TextVectorizer
 from src.models.ges_classifier import GesModelTrainer
-from src.visualization.grid_search_viz import GridSearchVisualizer
-from src.visualization.cross_val_viz import CrossValVisualizer
+# from src.visualization.grid_search_viz import GridSearchVisualizer
+# from src.visualization.cross_val_viz import CrossValVisualizer
 from src.models.validation import StatisticalAnalysis
 import os
 
