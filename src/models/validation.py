@@ -4,6 +4,7 @@ import json
 import os
 import itertools
 import statsmodels.stats.multitest
+import sklearn.metrics
 
 class NpEncoder(json.JSONEncoder):
     def default(self, obj): # pylint: disable=E0202
@@ -49,6 +50,24 @@ class StatisticalAnalysis:
                 'p_values': self.p_values,
                 'p_values_corrected': self.p_values_corrected
             }
+        }
+        with open(report_location, 'w', encoding='utf-8') as json_file:
+            json.dump(self.report, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
+class Performance:
+    def __init__(self,results_file):
+        results = np.loadtxt(results_file)
+        self.true = np.array(results[:,0],dtype=bool)
+        self.predicted_class = np.array(results[:,1],dtype=bool)
+        self.predicted_proba = results[:,3]
+    def analyze(self):
+        self.classification_report = sklearn.metrics.classification_report(self.true,self.predicted_class,output_dict=True)
+        self.roc_curve = sklearn.metrics.roc_curve(self.true,self.predicted_proba)
+        self.roc_auc_score = sklearn.metrics.roc_auc_score(self.true,self.predicted_proba)
+    def generate_report(self,report_location):
+        self.report = {
+            'classification_report': self.classification_report,
+            'roc_auc_score': self.roc_auc_score,
+            'roc_curve': self.roc_curve
         }
         with open(report_location, 'w', encoding='utf-8') as json_file:
             json.dump(self.report, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
