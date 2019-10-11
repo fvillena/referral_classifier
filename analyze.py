@@ -4,6 +4,7 @@ from src.features.text_embedding import TextVectorizer
 from src.models.ges_classifier import GesModelTrainer
 from src.visualization.grid_search_viz import GridSearchVisualizer
 from src.visualization.cross_val_viz import CrossValVisualizer
+from src.models.validation import StatisticalAnalysis
 import os
 
 corpus_generator = CorpusGenerator('data/raw/waiting_list_corpus_raw/','Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
@@ -35,3 +36,7 @@ trainer.generate_report('reports/')
 
 cross_val_viz = CrossValVisualizer('reports/cross_val/')
 cross_val_viz.plot('reports/figures/cross_val.pdf')
+
+statistical_analyzer = StatisticalAnalysis('reports/cross_val/')
+statistical_analyzer.analyze()
+statistical_analyzer.generate_report('reports/statistical_analysis.json')
