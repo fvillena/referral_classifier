@@ -153,7 +153,7 @@ class GesModelTrainer:
         features_test = self.test[:,:-1]
         labels_test = self.test[:,-1]
         estimator = best_estimator
-        estimator.set_params(**best_hp,n_jobs=n_jobs)
+        estimator.set_params(**best_hp,n_jobs=n_jobs,verbose=2)
         estimator.fit(features_train,labels_train)
         predictions_class = estimator.predict(features_test)
         predictions_probs = estimator.predict_proba(features_test)
