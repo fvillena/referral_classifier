@@ -41,4 +41,4 @@ trainer = GesModelTrainer('data/processed/train_text.npy','data/processed/train_
 # statistical_analyzer.analyze()
 # statistical_analyzer.generate_report('reports/statistical_analysis.json')
 
-trainer.train_best_model('data/processed/test_text.npy','data/processed/test_age.txt','data/processed/test_labels.txt','results/best_model_results.txt')
+trainer.train_best_model('data/processed/test_text.npy','data/processed/test_age.txt','data/processed/test_labels.txt','reports/best_model_results.txt')
