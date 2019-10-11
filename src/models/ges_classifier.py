@@ -157,7 +157,7 @@ class GesModelTrainer:
         estimator.fit(features_train,labels_train)
         predictions_class = estimator.predict(features_test)
         predictions_probs = estimator.predict_proba(features_test)
-        self.best_results = np.concatenate([labels_test,predictions_class,predictions_probs], axis=1)
+        self.best_results = np.column_stack([labels_test,predictions_class,predictions_probs])
         np.savetxt(results_location,self.best_results)
     def generate_report(self,report_location):
         for key,val in self.gs_scores.items():
