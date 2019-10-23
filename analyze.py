@@ -1,5 +1,6 @@
 from src.data.text_data import CorpusGenerator
 from src.data.ges_data import GesDatasetGenerator
+from src.data.urg_data import UrgDatasetGenerator
 from src.features.text_embedding import TextVectorizer
 from src.models.ges_classifier import GesModelTrainer
 from src.visualization.grid_search_viz import GridSearchVisualizer
@@ -24,7 +25,7 @@ os.system('bash src/models/compute_embeddings.sh')
 
 vectorizer = TextVectorizer('models/embeddings.vec','data/interim/train_text.txt','data/interim/test_text.txt')
 vectorizer.vectorize_text()
-vectorizer.write_data('data/processed/')
+vectorizer.write_data('ges','data/processed/')
 
 trainer = GesModelTrainer('data/processed/train_text.npy','data/processed/train_age.txt','data/processed/train_labels.txt')
 trainer.grid_search()
@@ -51,3 +52,15 @@ best_model_performance.generate_report('reports/best_model_performance.json')
 
 rock = RocCurve('reports/best_model_performance.json')
 rock.plot('reports/figures/roc_curve.pdf')
+
+# URG
+
+urg_generator = UrgDatasetGenerator('data/raw/waiting_list_corpus_raw/IQ_CONSOLIDADO_14102018_DEPURACION_UGD_revDJara_sinRUT.csv')
+urg_generator.preprocess()
+urg_generator.split()
+urg_generator.write_dataset('data/processed/','data/interim/')
+
+urg_vectorizer = TextVectorizer('models/embeddings.vec','data/interim/urg_train_text.txt','data/interim/urg_test_text.txt')
+urg_vectorizer.vectorize_text()
+urg_vectorizer.write_data('urg','data/processed/')
+
