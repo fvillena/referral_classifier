@@ -3,6 +3,7 @@ from src.data.ges_data import GesDatasetGenerator
 from src.data.urg_data import UrgDatasetGenerator
 from src.features.text_embedding import TextVectorizer
 from src.models.ges_classifier import GesModelTrainer
+from src.models.urg_classifier import UrgModelTrainer
 from src.visualization.grid_search_viz import GridSearchVisualizer
 from src.visualization.cross_val_viz import CrossValVisualizer
 from src.visualization.roc_curve import RocCurve
@@ -64,3 +65,6 @@ urg_vectorizer = TextVectorizer('models/embeddings.vec','data/interim/urg_train_
 urg_vectorizer.vectorize_text()
 urg_vectorizer.write_data('urg','data/processed/')
 
+urg_trainer = UrgModelTrainer('data/processed/urg_train_text.npy','data/processed/urg_train_labels.txt')
+urg_trainer.grid_search()
+urg_trainer.generate_report('reports/')
