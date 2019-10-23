@@ -68,3 +68,25 @@ urg_vectorizer.write_data('urg','data/processed/')
 urg_trainer = UrgModelTrainer('data/processed/urg_train_text.npy','data/processed/urg_train_labels.txt')
 urg_trainer.grid_search()
 urg_trainer.generate_report('reports/')
+
+urg_grid_search_viz = GridSearchVisualizer('reports/urg_grid_search/')
+urg_grid_search_viz.plot('reports/figures/urg_grid_search.pdf')
+
+urg_trainer.train_models('reports/urg_grid_search/',n_jobs=-1)
+urg_trainer.generate_report('reports/')
+
+cross_val_viz = CrossValVisualizer('reports/urg_cross_val/')
+cross_val_viz.plot('reports/figures/urg_cross_val.pdf')
+
+statistical_analyzer = StatisticalAnalysis('reports/urg_cross_val/')
+statistical_analyzer.analyze()
+statistical_analyzer.generate_report('reports/urg_statistical_analysis.json')
+
+urg_trainer.train_best_model('data/processed/urg_test_text.npy','data/processed/urg_test_labels.txt','reports/urg_best_model_results.txt')
+
+best_model_performance = Performance('reports/urg_best_model_results.txt')
+best_model_performance.analyze()
+best_model_performance.generate_report('reports/urg_best_model_performance.json')
+
+urg_rock = RocCurve('reports/urg_best_model_performance.json')
+urg_rock.plot('reports/figures/urg_roc_curve.pdf')
