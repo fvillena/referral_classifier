@@ -47,13 +47,14 @@ models = [
 
 best_estimator = sklearn.ensemble.RandomForestClassifier()
 best_hp = {
-    "n_estimators": 1600,
-    "min_samples_split": 5,
-    "min_samples_leaf": 4,
+    "n_estimators": 1000,
+    "min_samples_split": 10,
+    "min_samples_leaf": 1,
     "max_features": "auto",
-    "max_depth": 100,
+    "max_depth": 70,
     "bootstrap": True
-}
+  }
+
 
 np.random.seed(11)
 
