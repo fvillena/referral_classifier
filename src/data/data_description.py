@@ -37,7 +37,8 @@ class Descriptor:
                 for row in reader:
                     self.entry_dates.append(row[self.entry_column])
                     self.labels.append(row[self.label_column] == 'True')
-                    self.ages.append(float(row[self.age_column]))
+                    if self.age_column:
+                        self.ages.append(float(row[self.age_column]))
                     self.length += 1
             self.entry_dates = np.array(self.entry_dates, 'datetime64[D]')
             self.entry_dates.sort()
@@ -45,16 +46,17 @@ class Descriptor:
                 self.entry_dates[int(self.entry_dates.size * 0.0001)],
                 self.entry_dates[int(self.entry_dates.size * (1-0.0001))]
             ]
-            self.ages_normal_distribution = scipy.stats.shapiro(self.ages)[1] > 0.05
-            self.ages_mean = np.mean(self.ages)
-            self.ages_median = np.median(self.ages)
-            self.ages_sd = np.std(self.ages)
-            self.ages = np.array(self.ages)
-            self.ages.sort()
-            self.ages_interval = [
-                self.ages[int(self.ages.size * 0.0001)],
-                self.ages[int(self.ages.size * (1-0.0001))]
-            ]
+            if self.age_column:
+                self.ages_normal_distribution = scipy.stats.shapiro(self.ages)[1] > 0.05
+                self.ages_mean = np.mean(self.ages)
+                self.ages_median = np.median(self.ages)
+                self.ages_sd = np.std(self.ages)
+                self.ages = np.array(self.ages)
+                self.ages.sort()
+                self.ages_interval = [
+                    self.ages[int(self.ages.size * 0.0001)],
+                    self.ages[int(self.ages.size * (1-0.0001))]
+                ]
             self.labels_ratio = {
                 'True' : sum(self.labels),
                 'False' : abs(sum(self.labels) - len(self.labels))
