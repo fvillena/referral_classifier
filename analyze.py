@@ -59,6 +59,7 @@ rock.plot('reports/figures/roc_curve.pdf')
 
 urg_generator = UrgDatasetGenerator('data/raw/waiting_list_corpus_raw/IQ_CONSOLIDADO_14102018_DEPURACION_UGD_revDJara_sinRUT.csv')
 urg_generator.preprocess()
+urg_generator.data.dropna().to_csv('data/interim/urg.csv', index = False)
 urg_generator.split()
 urg_generator.write_dataset('data/processed/','data/interim/')
 
