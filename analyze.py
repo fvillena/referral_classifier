@@ -19,6 +19,7 @@ corpus_generator.write_corpus('data/processed/corpus.txt')
 
 ges_generator = GesDatasetGenerator('data/raw/waiting_list_corpus_raw/Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
 ges_generator.preprocess()
+ges_generator.data.to_csv('data/interim/ges.csv', index = False)
 ges_generator.split()
 ges_generator.write_dataset('data/processed/','data/interim/')
 
