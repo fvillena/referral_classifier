@@ -23,18 +23,17 @@ class UrgDatasetGenerator:
                    low_memory=False, 
                    error_bad_lines=False,
                    sep=";")
-        print(self.data.shape)
     def preprocess(self):
         self.data=self.data.rename(columns = {'REGLA 16+17':'urg'})
-        self.data=self.data[["urg","SOSPECHA_DIAG"]]
+        self.data.F_ENTRADA = pd.to_datetime(self.data.F_ENTRADA)
+        self.data=self.data[["urg","SOSPECHA_DIAG","F_ENTRADA"]]
         self.data['SOSPECHA_DIAG'] = self.data.SOSPECHA_DIAG.astype(str)
         self.data['SOSPECHA_DIAG'] = self.data.SOSPECHA_DIAG.apply(normalizer)
-        self.data = self.data.dropna()
+        self.data = self.data.dropna(subset=["urg","SOSPECHA_DIAG"])
         self.data['SOSPECHA_DIAG'] = self.data.SOSPECHA_DIAG.apply(nltk.tokenize.word_tokenize)
-        self.data = self.data.dropna()
+        self.data = self.data.dropna(subset=["urg","SOSPECHA_DIAG"])
         self.data['urg'] = np.where(self.data['urg'] == 1, True, False)
         self.data = self.data[self.data.SOSPECHA_DIAG.str.len() > 1]
-        print(self.data.shape)
     def split(self, test_size = 0.4):
         train_features, test_features, train_labels, self.test_labels = sklearn.model_selection.train_test_split(self.data['SOSPECHA_DIAG'],self.data['urg'], test_size = test_size, random_state = 11)
         
