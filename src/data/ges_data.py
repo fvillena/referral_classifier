@@ -30,7 +30,7 @@ class GesDatasetGenerator:
         future = self.data['FECHANACIMIENTO'] > '2018-01-01'
         self.data.loc[future, 'FECHANACIMIENTO'] -= dt.timedelta(days=365.25*100)
         self.data["edad"] = (self.data.INGRESO-self.data.FECHANACIMIENTO).astype('timedelta64[Y]')
-        self.data=self.data[["GES","SOSPECHA_DIAGNOSTICA","edad"]]
+        self.data=self.data[["GES","SOSPECHA_DIAGNOSTICA","edad",'FECHANACIMIENTO','INGRESO']]
         self.data['SOSPECHA_DIAGNOSTICA'] = self.data.SOSPECHA_DIAGNOSTICA.astype(str)
         self.data['SOSPECHA_DIAGNOSTICA'] = self.data.SOSPECHA_DIAGNOSTICA.apply(normalizer)
         self.data = self.data.dropna()
@@ -38,6 +38,7 @@ class GesDatasetGenerator:
         self.data["edad"] = np.where(self.data.edad < 0, np.nan, self.data.edad)
         self.data = self.data.dropna()
         scaler = sklearn.preprocessing.MinMaxScaler()
+        self.data["edad_raw"] = self.data[["edad"]]
         self.data["edad"] = scaler.fit_transform(self.data[["edad"]])
         self.data['GES'] = np.where(self.data['GES'] == 'SI', True, False)
         self.data = self.data[self.data.SOSPECHA_DIAGNOSTICA.str.len() > 1]
