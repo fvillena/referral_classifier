@@ -39,7 +39,11 @@ class StatisticalAnalysis:
             }
         self.p_values = []
         for combination in self.combinations:
-            p = scipy.stats.ttest_rel(combination[0][1],combination[1][1]).pvalue
+            normal_distribution = self.summary[combination[0][0]]['normally_distributed'] & self.summary[combination[1][0]]['normally_distributed']
+            if normal_distribution:
+                p = scipy.stats.ttest_rel(combination[0][1],combination[1][1]).pvalue
+            else:
+                p = scipy.stats.wilcoxon(combination[0][1],combination[1][1]).pvalue
             self.p_values.append(p)
         self.p_values_corrected = statsmodels.stats.multitest.multipletests(self.p_values,method='bonferroni',returnsorted=False)[1]
     def generate_report(self,report_location):
