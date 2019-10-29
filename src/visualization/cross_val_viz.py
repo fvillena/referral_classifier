@@ -19,6 +19,9 @@ class CrossValVisualizer:
             self.models, self.scores, _ = zip(*self.sorted_data)
     def plot(self,figure_location):
         plt.boxplot(self.scores, labels=self.models)
+        plt.title('Model Performances')
+        plt.xlabel('Model')
+        plt.ylabel('AUCROC')
         plt.xticks(rotation=45)
         plt.tight_layout()
         plt.savefig(figure_location)
