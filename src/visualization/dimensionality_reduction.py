@@ -7,7 +7,7 @@ class DimensionalityReducer:
         self.embedding = gensim.models.KeyedVectors.load_word2vec_format(embedding_location, binary=False)
     
     def fit(self,reduced_embedding_location,dimensions=2):
-        tisni = sklearn.manifold.TSNE(verbose=3, random_state=11, n_components=dimensions)
+        tisni = sklearn.manifold.TSNE(verbose=3, random_state=11, n_components=dimensions, n_jobs=-1)
         self.reduced_embedding = tisni.fit_transform(self.embedding.vectors)
         self.reduced_embedding = pd.DataFrame(self.reduced_embedding,columns=['x','y'])
         self.reduced_embedding['word'] = pd.Series(list(self.embedding.vocab.keys()))
