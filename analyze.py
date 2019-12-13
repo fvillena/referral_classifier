@@ -9,6 +9,7 @@ from src.visualization.cross_val_viz import CrossValVisualizer
 from src.visualization.roc_curve import RocCurve
 from src.models.validation import StatisticalAnalysis
 from src.models.validation import Performance
+from src.visualization.dimensionality_reduction import DimensionalityReducer
 import os
 
 corpus_generator = CorpusGenerator('data/raw/waiting_list_corpus_raw/','Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
@@ -92,3 +93,7 @@ best_model_performance.generate_report('reports/urg_best_model_performance.json'
 
 urg_rock = RocCurve('reports/urg_best_model_performance.json')
 urg_rock.plot('reports/figures/urg_roc_curve.pdf')
+
+# embeddings viz
+dr = DimensionalityReducer("models/embeddings.vec")
+dr.fit("data/processed/embeddings_2d.csv")
