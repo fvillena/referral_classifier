@@ -5,6 +5,7 @@ import sklearn.neural_network
 import sklearn.model_selection
 import numpy as np
 import json
+import joblib
 
 models = [
     (
@@ -130,7 +131,7 @@ class GesModelTrainer:
                 return_train_score=True
             )
             self.cv_scores[model_name] = cv_scores
-    def train_best_model(self,test_texts, test_ages, test_labels,results_location,best_estimator=best_estimator,best_hp=best_hp,n_jobs=-1):
+    def train_best_model(self,test_texts, test_ages, test_labels,results_location, serialized_model_location,best_estimator=best_estimator,best_hp=best_hp,n_jobs=-1):
         self.test_texts = np.load(test_texts)
         self.test_ages = []
         with open(test_ages, encoding='utf-8') as file:
@@ -155,6 +156,7 @@ class GesModelTrainer:
         estimator = best_estimator
         estimator.set_params(**best_hp,n_jobs=n_jobs,verbose=2)
         estimator.fit(features_train,labels_train)
+        joblib.dump(estimator, serialized_model_location)
         predictions_class = estimator.predict(features_test)
         predictions_probs = estimator.predict_proba(features_test)
         self.best_results = np.column_stack([labels_test,predictions_class,predictions_probs])

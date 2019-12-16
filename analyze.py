@@ -50,7 +50,7 @@ statistical_analyzer = StatisticalAnalysis('reports/cross_val/')
 statistical_analyzer.analyze()
 statistical_analyzer.generate_report('reports/statistical_analysis.json')
 
-trainer.train_best_model('data/processed/test_text.npy','data/processed/test_age.txt','data/processed/test_labels.txt','reports/best_model_results.txt')
+trainer.train_best_model('data/processed/test_text.npy','data/processed/test_age.txt','data/processed/test_labels.txt','reports/best_model_results.txt', "models/ges.joblib")
 
 best_model_performance = Performance('reports/best_model_results.txt')
 best_model_performance.analyze()
@@ -88,7 +88,7 @@ statistical_analyzer = StatisticalAnalysis('reports/urg_cross_val/')
 statistical_analyzer.analyze()
 statistical_analyzer.generate_report('reports/urg_statistical_analysis.json')
 
-urg_trainer.train_best_model('data/processed/urg_test_text.npy','data/processed/urg_test_labels.txt','reports/urg_best_model_results.txt')
+urg_trainer.train_best_model('data/processed/urg_test_text.npy','data/processed/urg_test_labels.txt','reports/urg_best_model_results.txt', "models/urg.joblib")
 
 best_model_performance = Performance('reports/urg_best_model_results.txt')
 best_model_performance.analyze()
