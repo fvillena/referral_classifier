@@ -22,7 +22,7 @@ corpus_generator.process()
 corpus_generator.write_corpus('data/processed/corpus.txt')
 
 ges_generator = GesDatasetGenerator('data/raw/waiting_list_corpus_raw/Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
-ges_generator.preprocess()
+ges_generator.preprocess("models/scaler.joblib")
 ges_generator.data.to_csv('data/interim/ges.csv', index = False)
 ges_generator.split()
 ges_generator.write_dataset('data/processed/','data/interim/')
@@ -30,7 +30,7 @@ ges_generator.write_dataset('data/processed/','data/interim/')
 os.system('bash src/models/compute_embeddings.sh')
 
 vectorizer = TextVectorizer('models/embeddings.vec','data/interim/train_text.txt','data/interim/test_text.txt')
-vectorizer.vectorize_text()
+vectorizer.vectorize_text("models/idf.json")
 vectorizer.write_data('ges','data/processed/')
 
 trainer = GesModelTrainer('data/processed/train_text.npy','data/processed/train_age.txt','data/processed/train_labels.txt')
@@ -68,7 +68,7 @@ urg_generator.split()
 urg_generator.write_dataset('data/processed/','data/interim/')
 
 urg_vectorizer = TextVectorizer('models/embeddings.vec','data/interim/urg_train_text.txt','data/interim/urg_test_text.txt')
-urg_vectorizer.vectorize_text()
+urg_vectorizer.vectorize_text("models/idf_urg.json")
 urg_vectorizer.write_data('urg','data/processed/')
 
 urg_trainer = UrgModelTrainer('data/processed/urg_train_text.npy','data/processed/urg_train_labels.txt')
