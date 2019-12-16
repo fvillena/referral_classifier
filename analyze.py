@@ -13,6 +13,7 @@ from src.visualization.dimensionality_reduction import DimensionalityReducer
 from src.visualization.embedding_cloud import EmbeddingCloud
 from src.data.ground_truth import HumanClassification
 from src.data.ground_truth import GroundTruthGenerator
+from src.models.validation import GroundTruthPredictor
 import os
 
 corpus_generator = CorpusGenerator('data/raw/waiting_list_corpus_raw/','Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
@@ -112,3 +113,5 @@ hc.write_report("reports/human_classification_report.json")
 #ground truth
 gg = GroundTruthGenerator("reports/human_classification_report.json","data/external/human_disagreements_corrected.csv")
 gg.write_ground_truth("data/processed/ground_truth.csv")
+gp = GroundTruthPredictor("models/ges.joblib","models/scaler.joblib","models/embeddings.vec","models/idf.json","data/processed/ground_truth.csv")
+gp.predict("models/machine.csv")
