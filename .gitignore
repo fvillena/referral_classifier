@@ -91,3 +91,4 @@ target/
 
 /models
 /notebooks
+/test.py
