@@ -4,6 +4,7 @@ import datetime as dt
 import nltk
 import sklearn.preprocessing
 import sklearn.model_selection
+import joblib
 import re
 
 def normalizer(text, remove_tildes = True): #normalizes a given string to lowercase and changes all vowels to their base form
@@ -23,7 +24,7 @@ class GesDatasetGenerator:
                    low_memory=False, 
                    error_bad_lines=False,
                    sep=",")
-    def preprocess(self):
+    def preprocess(self, serialized_scaler_location):
         self.data.INGRESO = pd.to_datetime(self.data.INGRESO, errors="coerce")
         self.data.FECHANACIMIENTO = pd.to_datetime(self.data.FECHANACIMIENTO, errors="coerce", format="%d/%m/%y")
         from datetime import timedelta, date
@@ -37,9 +38,10 @@ class GesDatasetGenerator:
         self.data['SOSPECHA_DIAGNOSTICA'] = self.data.SOSPECHA_DIAGNOSTICA.apply(nltk.tokenize.word_tokenize)
         self.data["edad"] = np.where(self.data.edad < 0, np.nan, self.data.edad)
         self.data = self.data.dropna()
-        scaler = sklearn.preprocessing.MinMaxScaler()
+        self.scaler = sklearn.preprocessing.MinMaxScaler()
+        joblib.dump(self.scaler,serialized_scaler_location)
         self.data["edad_raw"] = self.data[["edad"]]
-        self.data["edad"] = scaler.fit_transform(self.data[["edad"]])
+        self.data["edad"] = self.scaler.fit_transform(self.data[["edad"]])
         self.data['GES'] = np.where(self.data['GES'] == 'SI', True, False)
         self.data = self.data[self.data.SOSPECHA_DIAGNOSTICA.str.len() > 1]
     def split(self, test_size = 0.1):
