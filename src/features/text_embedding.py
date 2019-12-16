@@ -1,6 +1,7 @@
 import gensim # module for computing word embeddings
 import numpy as np # linear algebra module
 import sklearn.feature_extraction # package to perform tf-idf vertorization
+import json
 
 def to_vector(texto,model,idf):
     """ Receives a sentence string along with a word embedding model and 
@@ -31,10 +32,12 @@ class TextVectorizer:
             for line in file:
                 line = line.rstrip()
                 self.test_sentences.append(line) 
-    def vectorize_text(self):
+    def vectorize_text(self,idf_location):
         tfidfvectorizer = sklearn.feature_extraction.text.TfidfVectorizer() # instance of the tf-idf vectorizer
         tfidfvectorizer.fit(self.train_sentences) # fitting the vectorizer and transforming the properties
         self.idf = {key:val for key,val in zip(tfidfvectorizer.get_feature_names(),tfidfvectorizer.idf_)}
+        with open(idf_location, 'w', encoding='utf-8') as json_file:
+            json.dump(self.idf, json_file, indent=2, ensure_ascii=False)
         self.train_matrix = np.zeros( # creatign an empty matrix
             (
                 len(self.train_sentences), # the number of rows is equal to the number of data points
