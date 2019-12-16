@@ -11,6 +11,7 @@ from src.models.validation import StatisticalAnalysis
 from src.models.validation import Performance
 from src.visualization.dimensionality_reduction import DimensionalityReducer
 from src.visualization.embedding_cloud import EmbeddingCloud
+from src.data.ground_truth import HumanClassification
 import os
 
 corpus_generator = CorpusGenerator('data/raw/waiting_list_corpus_raw/','Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
@@ -100,3 +101,9 @@ dr = DimensionalityReducer("models/embeddings.vec")
 dr.fit("data/processed/embeddings_2d.csv")
 ec = EmbeddingCloud("data/processed/embeddings_2d.csv")
 ec.plot("reports/figures/embedding_cloud.png")
+
+#human classification
+hc = HumanClassification("data/external/human-classification/")
+hc.calculate_fleiss()
+hc.extract_disagreements("data/interim/human_disagreements.csv")
+hc.write_report("reports/human_classification_report.json")
