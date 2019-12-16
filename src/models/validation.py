@@ -1,10 +1,14 @@
 import scipy.stats
 import numpy as np
 import json
+import sys
 import os
+sys.path.append(os.path.join(os.path.dirname(__file__), ".", "."))
 import itertools
 import statsmodels.stats.multitest
 import sklearn.metrics
+from estimator import GesEstimator
+import pandas as pd
 
 class NpEncoder(json.JSONEncoder):
     def default(self, obj): # pylint: disable=E0202
@@ -75,3 +79,12 @@ class Performance:
         }
         with open(report_location, 'w', encoding='utf-8') as json_file:
             json.dump(self.report, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
+
+class GroundTruthPredictor:
+    def __init__(self,model,scaler,embedding,idf,ground_truth_location):
+        self.estimator = GesEstimator(model,scaler,embedding,idf)
+        self.ground_truth = pd.read_csv(ground_truth_location)
+        del self.ground_truth["ges"]
+    def predict(self,predictions_location):
+        self.ground_truth["ges"] = self.ground_truth.apply(lambda x: self.estimator.predict(x["diagnostic"], x['age']), axis=1)
+        self.ground_truth.to_csv(predictions_location, index=False)
