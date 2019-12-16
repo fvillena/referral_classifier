@@ -39,5 +39,6 @@ class GesEstimator:
         age = self.scaler.transform(np.array([age]).reshape(-1,1))[0]
         vector = np.array(to_vector(diagnostic,self.embedding,self.idf))
         features = np.concatenate((vector,age)).reshape(1, -1)
-        result = self.model.predict(features)
+        result = self.model.predict(features)[0]
+        result = True if result == 1 else False
         return result
