@@ -39,9 +39,9 @@ class GesDatasetGenerator:
         self.data["edad"] = np.where(self.data.edad < 0, np.nan, self.data.edad)
         self.data = self.data.dropna()
         self.scaler = sklearn.preprocessing.MinMaxScaler()
-        joblib.dump(self.scaler,serialized_scaler_location)
         self.data["edad_raw"] = self.data[["edad"]]
         self.data["edad"] = self.scaler.fit_transform(self.data[["edad"]])
+        joblib.dump(self.scaler,serialized_scaler_location)
         self.data['GES'] = np.where(self.data['GES'] == 'SI', True, False)
         self.data = self.data[self.data.SOSPECHA_DIAGNOSTICA.str.len() > 1]
     def split(self, test_size = 0.1):
