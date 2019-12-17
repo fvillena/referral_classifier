@@ -87,4 +87,21 @@ class GroundTruthPredictor:
         del self.ground_truth["ges"]
     def predict(self,predictions_location):
         self.ground_truth["ges"] = self.ground_truth.apply(lambda x: self.estimator.predict(x["diagnostic"], x['age']), axis=1)
-        self.ground_truth.to_csv(predictions_location, index=False)
+        self.ground_truth.to_csv(predictions_location, index=False, sep=";")
+
+class GroundTruthPerformance:
+    def __init__(self,ground_truth_file, candidates_files_list):
+        self.data = pd.read_csv(ground_truth_file).sort_values(by='id')
+        self.ground_truth = self.data['ges'].tolist()
+        del self.data["ges"]
+        self.candidates = {}
+        for filepath in candidates_files_list:
+            name = filepath.split('/')[-1].split('.')[0]
+            predictions = pd.read_csv(filepath, sep=";").sort_values(by='id')["ges"].tolist()
+            self.candidates[name] = predictions
+
+    def evaluate(self):
+        self.candidates_performances = {}
+        for candidate,predictions in self.candidates.items():
+            performance = sklearn.metrics.classification_report(self.ground_truth,predictions,output_dict=True)
+            self.candidates_performances[candidate] = performance
