@@ -45,6 +45,8 @@ class HumanClassification:
                 self.disagreements[idx] = {}
                 self.disagreements[idx]["diagnostic"] = data["diagnostic"]
                 self.disagreements[idx]["age"] = data["age"]
+                for name,classification in data["ges"].items():
+                    self.disagreements[idx][name] = classification
         self.disagreements_df = pd.DataFrame.from_dict(self.disagreements, orient='index')
         self.disagreements_df.to_csv(disagreements_file_location, index_label="id")
     def write_report(self,report_location):
