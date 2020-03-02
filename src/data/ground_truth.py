@@ -63,7 +63,7 @@ class HumanClassification:
 
 class GroundTruthGenerator:
     def __init__(self, human_dataset, super_dataset):
-        with open(human_dataset) as json_file:
+        with open(human_dataset, encoding="utf-8") as json_file:
             self.dataset = json.load(json_file)["dataset"]
         with open(super_dataset, encoding="utf-8-sig", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
