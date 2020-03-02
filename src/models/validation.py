@@ -114,3 +114,7 @@ class HumanGroundTruthPerformance:
         for candidate,predictions in self.candidates.items():
             performance = sklearn.metrics.classification_report(self.ground_truth,predictions,output_dict=True)
             self.candidates_performances[candidate] = performance
+    
+    def export_report(self,report_location):
+        with open(report_location, 'w', encoding='utf-8') as json_file:
+            json.dump(self.candidates_performances, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)

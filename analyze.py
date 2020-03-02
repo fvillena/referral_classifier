@@ -126,3 +126,11 @@ hgper = HumanGroundTruthPerformance(
     ]
 )
 hgper.evaluate()
+hgper.export_report("reports/human_performances.json")
+
+machine_gt_performance = Performance('models/machine.txt')
+machine_gt_performance.analyze()
+machine_gt_performance.generate_report('reports/machine_gt_performance.json')
+
+machine_gt_rock = RocCurve('reports/machine_gt_performance.json')
+machine_gt_rock.plot('reports/figures/machine_gt_roc_curve.pdf')
