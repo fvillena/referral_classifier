@@ -98,7 +98,7 @@ class GroundTruthPredictor:
         self.best_results = np.column_stack([self.labels_test,np.array(self.predictions_class),np.vstack(self.predictions_probs)])
         np.savetxt(predictions_location,self.best_results)
 
-class GroundTruthPerformance:
+class HumanGroundTruthPerformance:
     def __init__(self,ground_truth_file, candidates_files_list):
         self.data = pd.read_csv(ground_truth_file).sort_values(by='id')
         self.ground_truth = self.data['ges'].tolist()
