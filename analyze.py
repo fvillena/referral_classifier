@@ -14,6 +14,8 @@ from src.visualization.embedding_cloud import EmbeddingCloud
 from src.data.ground_truth import HumanClassification
 from src.data.ground_truth import GroundTruthGenerator
 from src.models.validation import GroundTruthPredictor
+from src.models.validation import GroundTruthPerformance
+
 import os
 
 corpus_generator = CorpusGenerator('data/raw/waiting_list_corpus_raw/','Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
@@ -115,3 +117,12 @@ gg = GroundTruthGenerator("reports/human_classification_report.json","data/exter
 gg.write_ground_truth("data/processed/ground_truth.csv")
 gp = GroundTruthPredictor("models/ges.joblib","models/scaler.joblib","models/embeddings.vec","models/idf.json","data/processed/ground_truth.csv")
 gp.predict("models/machine.csv")
+gper = GroundTruthPerformance(
+    "data/processed/ground_truth.csv",
+    [
+        "data/external/human-classification/nury.csv",
+        "data/external/human-classification/ignacio.csv",
+        "models/machine.csv"
+    ]
+)
+gper.evaluate()
