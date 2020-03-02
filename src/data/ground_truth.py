@@ -52,6 +52,9 @@ class HumanClassification:
     def write_report(self,report_location):
         self.report = {
             "fleiss" : self.fleiss,
+            "dataset_n" : len(self.dataset),
+            "agreements_n": len(self.dataset) - len(self.disagreements),
+            "disagreements_n": len(self.disagreements),
             "disagreements" : self.disagreements,
             "dataset" : self.dataset
         }
