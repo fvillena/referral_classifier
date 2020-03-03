@@ -8,6 +8,7 @@ import itertools
 import statsmodels.stats.multitest
 import sklearn.metrics
 from estimator import GesEstimator
+from estimator import UrgEstimator
 import pandas as pd
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -95,6 +96,21 @@ class GroundTruthPredictor:
             logging.info("data point # {}".format(i))
             self.predictions_class.append(self.estimator.predict(row["diagnostic"], row['age']))
             self.predictions_probs.append(self.estimator.predict_proba(row["diagnostic"], row['age']))
+        self.best_results = np.column_stack([self.labels_test,np.array(self.predictions_class),np.vstack(self.predictions_probs)])
+        np.savetxt(predictions_location,self.best_results)
+
+class GroundTruthPredictorUrg:
+    def __init__(self,model,embedding,idf,ground_truth_location):
+        self.estimator = UrgEstimator(model,embedding,idf)
+        self.ground_truth = pd.read_csv(ground_truth_location)
+        self.labels_test = np.array(self.ground_truth["urg"])
+    def predict(self,predictions_location):
+        self.predictions_class = []
+        self.predictions_probs = []
+        for i,row in self.ground_truth.iterrows():
+            logging.info("data point # {}".format(i))
+            self.predictions_class.append(self.estimator.predict(row["diagnostic"]))
+            self.predictions_probs.append(self.estimator.predict_proba(row["diagnostic"]))
         self.best_results = np.column_stack([self.labels_test,np.array(self.predictions_class),np.vstack(self.predictions_probs)])
         np.savetxt(predictions_location,self.best_results)
 
