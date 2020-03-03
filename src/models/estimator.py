@@ -48,3 +48,21 @@ class GesEstimator:
         features = np.concatenate((vector,age)).reshape(1, -1)
         result = self.model.predict_proba(features)[0]
         return result
+
+class UrgEstimator:
+    def __init__(self,model,embedding,idf):
+        self.model = joblib.load(model)
+        self.embedding = self.embedding = gensim.models.KeyedVectors.load_word2vec_format(embedding, binary=False )
+        with open(idf, encoding="utf-8") as json_file:
+            self.idf = json.load(json_file)
+    def predict(self,diagnostic):
+        vector = np.array(to_vector(diagnostic,self.embedding,self.idf))
+        features = vector.reshape(1, -1)
+        result = self.model.predict(features)[0]
+        result = True if result == 1 else False
+        return result
+    def predict_proba(self,diagnostic):
+        vector = np.array(to_vector(diagnostic,self.embedding,self.idf))
+        features = (vector).reshape(1, -1)
+        result = self.model.predict_proba(features)[0]
+        return result
