@@ -115,14 +115,14 @@ class GroundTruthPredictorUrg:
         np.savetxt(predictions_location,self.best_results)
 
 class HumanGroundTruthPerformance:
-    def __init__(self,ground_truth_file, candidates_files_list):
+    def __init__(self,ground_truth_file, candidates_files_list, classs):
         self.data = pd.read_csv(ground_truth_file).sort_values(by='id')
-        self.ground_truth = self.data['ges'].tolist()
-        del self.data["ges"]
+        self.ground_truth = self.data[classs].tolist()
+        del self.data[classs]
         self.candidates = {}
         for filepath in candidates_files_list:
             name = filepath.split('/')[-1].split('.')[0]
-            predictions = pd.read_csv(filepath, sep=";").sort_values(by='id')["ges"].tolist()
+            predictions = pd.read_csv(filepath, sep=";").sort_values(by='id')[classs].tolist()
             self.candidates[name] = predictions
 
     def evaluate(self):
