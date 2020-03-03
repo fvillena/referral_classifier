@@ -14,6 +14,7 @@ from src.visualization.embedding_cloud import EmbeddingCloud
 from src.data.ground_truth import HumanClassification
 from src.data.ground_truth import GroundTruthGenerator
 from src.models.validation import GroundTruthPredictor
+from src.models.validation import GroundTruthPredictorUrg
 from src.models.validation import HumanGroundTruthPerformance
 
 import os
@@ -107,13 +108,13 @@ ec = EmbeddingCloud("data/processed/embeddings_2d.csv")
 ec.plot("reports/figures/embedding_cloud.png")
 
 #human classification
-hc = HumanClassification("data/external/human-classification/")
+hc = HumanClassification("data/external/human-classification/","ges")
 hc.calculate_fleiss()
 hc.extract_disagreements("data/interim/human_disagreements.csv")
 hc.write_report("reports/human_classification_report.json")
 
 #ground truth
-gg = GroundTruthGenerator("reports/human_classification_report.json","data/external/human_disagreements_corrected.csv")
+gg = GroundTruthGenerator("reports/human_classification_report.json","data/external/human_disagreements_corrected.csv","ges",",")
 gg.write_ground_truth("data/processed/ground_truth.csv")
 gp = GroundTruthPredictor("models/ges.joblib","models/scaler.joblib","models/embeddings.vec","models/idf.json","data/processed/ground_truth.csv")
 gp.predict("models/machine.csv")
@@ -123,7 +124,7 @@ hgper = HumanGroundTruthPerformance(
         "data/external/human-classification/nury.csv",
         "data/external/human-classification/ignacio.csv",
         "data/external/human-classification/maricella.csv",
-    ]
+    ],"ges"
 )
 hgper.evaluate()
 hgper.export_report("reports/human_performances.json")
@@ -134,3 +135,29 @@ machine_gt_performance.generate_report('reports/machine_gt_performance.json')
 
 machine_gt_rock = RocCurve('reports/machine_gt_performance.json')
 machine_gt_rock.plot('reports/figures/machine_gt_roc_curve.pdf')
+
+hc_urg = HumanClassification("data/external/human-classification_urg/","urg")
+hc_urg.calculate_fleiss()
+hc_urg.extract_disagreements("data/interim/human_disagreements_urg.csv")
+hc_urg.write_report("reports/human_classification_report_urg.json")
+
+gg_urg = GroundTruthGenerator("reports/human_classification_report_urg.json","data/external/human_disagreements_urg_corrected.csv","urg",";")
+gg_urg.write_ground_truth("data/processed/ground_truth_urg.csv")
+
+gp_urg = GroundTruthPredictorUrg("models/urg.joblib","models/embeddings.vec","models/idf.json","data/processed/ground_truth_urg.csv")
+gp_urg.predict("models/machine_urg.txt")
+
+hgper_urg = HumanGroundTruthPerformance(
+    "data/processed/ground_truth_urg.csv",
+    [
+        "data/external/human-classification_urg/nury.csv",
+        "data/external/human-classification_urg/ignacio.csv",
+        "data/external/human-classification_urg/maricella.csv",
+    ],"urg"
+)
+hgper_urg.evaluate()
+hgper_urg.export_report("reports/human_performances_urg.json")
+
+machine_gt_performance_urg = Performance('models/machine_urg.txt')
+machine_gt_performance_urg.analyze()
+machine_gt_performance_urg.generate_report('reports/machine_gt_performance_urg.json')
