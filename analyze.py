@@ -161,3 +161,6 @@ hgper_urg.export_report("reports/human_performances_urg.json")
 machine_gt_performance_urg = Performance('models/machine_urg.txt')
 machine_gt_performance_urg.analyze()
 machine_gt_performance_urg.generate_report('reports/machine_gt_performance_urg.json')
+
+machine_gt_rock_urg = RocCurve('reports/machine_gt_performance_urg.json')
+machine_gt_rock_urg.plot('reports/figures/machine_gt_roc_curve_urg.pdf')
