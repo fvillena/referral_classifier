@@ -13,8 +13,10 @@ class HumanClassification:
     def __init__(self, human_classifications_location,classs):
         self.dataset = {}
         self.classs = classs
+        self.human_names = []
         for filename in os.listdir(human_classifications_location):
             human_name = filename.split(".")[0]
+            self.human_names.append(human_name)
             with open(human_classifications_location + filename, encoding="utf-8-sig", newline='') as csvfile:
                 reader = csv.DictReader(csvfile, delimiter=";")
                 for row in reader:
@@ -50,12 +52,22 @@ class HumanClassification:
                     self.disagreements[idx][name] = classification
         self.disagreements_df = pd.DataFrame.from_dict(self.disagreements, orient='index')
         self.disagreements_df.to_csv(disagreements_file_location, index_label="id")
+    def calculate_venn(self):
+        self.venn_data={name:[] for name in self.human_names}
+        for idx,data in self.dataset.items():
+            classifications = data[self.classs]
+            for name,classification in classifications.items():
+                if classification:
+                    self.venn_data[name].append(idx)
+                else:
+                    self.venn_data[name].append(idx*-1)
     def write_report(self,report_location):
         self.report = {
             "fleiss" : self.fleiss,
             "dataset_n" : len(self.dataset),
             "agreements_n": len(self.dataset) - len(self.disagreements),
             "disagreements_n": len(self.disagreements),
+            "venn_data": self.venn_data,
             "disagreements" : self.disagreements,
             "dataset" : self.dataset
         }
