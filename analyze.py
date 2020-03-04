@@ -110,6 +110,7 @@ ec.plot("reports/figures/embedding_cloud.png")
 #human classification
 hc = HumanClassification("data/external/human-classification/","ges")
 hc.calculate_fleiss()
+hc.calculate_venn()
 hc.extract_disagreements("data/interim/human_disagreements.csv")
 hc.write_report("reports/human_classification_report.json")
 
@@ -133,11 +134,12 @@ machine_gt_performance = Performance('models/machine.txt')
 machine_gt_performance.analyze()
 machine_gt_performance.generate_report('reports/machine_gt_performance.json')
 
-machine_gt_rock = RocCurve('reports/machine_gt_performance.json')
-machine_gt_rock.plot('reports/figures/machine_gt_roc_curve.pdf')
+machine_gt_rock = RocCurve('reports/machine_gt_performance.json',"reports/human_performances.json")
+machine_gt_rock.plot('reports/figures/machine_gt_roc_curve.png', True)
 
 hc_urg = HumanClassification("data/external/human-classification_urg/","urg")
 hc_urg.calculate_fleiss()
+hc_urg.calculate_venn()
 hc_urg.extract_disagreements("data/interim/human_disagreements_urg.csv")
 hc_urg.write_report("reports/human_classification_report_urg.json")
 
@@ -162,5 +164,5 @@ machine_gt_performance_urg = Performance('models/machine_urg.txt')
 machine_gt_performance_urg.analyze()
 machine_gt_performance_urg.generate_report('reports/machine_gt_performance_urg.json')
 
-machine_gt_rock_urg = RocCurve('reports/machine_gt_performance_urg.json')
-machine_gt_rock_urg.plot('reports/figures/machine_gt_roc_curve_urg.pdf')
+machine_gt_rock_urg = RocCurve('reports/machine_gt_performance_urg.json',"reports/human_performances_urg.json")
+machine_gt_rock_urg.plot('reports/figures/machine_gt_roc_curve_urg.png',True)
