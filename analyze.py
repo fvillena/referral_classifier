@@ -16,7 +16,8 @@ from src.data.ground_truth import GroundTruthGenerator
 from src.models.validation import GroundTruthPredictor
 from src.models.validation import GroundTruthPredictorUrg
 from src.models.validation import HumanGroundTruthPerformance
-
+from src.features.text_vectorization import BowVectorizer
+from src.models.naive_bayes import NbModelTrainer
 import os
 
 corpus_generator = CorpusGenerator('data/raw/waiting_list_corpus_raw/','Rene Lagos - SELECT_ID_CORTA_FOLIO_INGRESO_GES_RUTPACIENTE_ESPECIALIDAD_FECHA_201810301333.csv')
@@ -166,3 +167,19 @@ machine_gt_performance_urg.generate_report('reports/machine_gt_performance_urg.j
 
 machine_gt_rock_urg = RocCurve('reports/machine_gt_performance_urg.json',"reports/human_performances_urg.json")
 machine_gt_rock_urg.plot('reports/figures/machine_gt_roc_curve_urg.png',True)
+
+##### BOW
+
+ges_bow_vectorizer = BowVectorizer('data/interim/train_text.txt','data/interim/test_text.txt')
+ges_bow_vectorizer.vectorize_text()
+vectorizer.write_data('ges_bow','data/processed/')
+
+ges_bow_trainer = NbModelTrainer('data/processed/ges_bow_train_text.npz','data/processed/train_labels.txt')
+ges_bow_trainer.train_model('data/processed/ges_bow_test_text.npz','data/processed/test_labels.txt','reports/ges_bow_best_model_results.txt', "models/ges_bow.joblib")
+
+ges_bow_performance = Performance('reports/ges_bow_best_model_results.txt')
+ges_bow_performance.analyze()
+ges_bow_performance.generate_report('reports/ges_bow_best_model_performance.json')
+
+ges_bow_rock = RocCurve('reports/ges_bow_best_model_performance.json')
+ges_bow_rock.plot('reports/figures/ges_bow_roc_curve.pdf')
