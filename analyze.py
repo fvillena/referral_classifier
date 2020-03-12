@@ -175,7 +175,7 @@ ges_bow_vectorizer.vectorize_text()
 vectorizer.write_data('ges_bow','data/processed/')
 
 ges_bow_trainer = NbModelTrainer('data/processed/ges_bow_train_text.npz','data/processed/train_labels.txt')
-ges_bow_trainer.train_model('data/processed/ges_bow_test_text.npz','data/processed/test_labels.txt','reports/ges_bow_best_model_results.txt', "models/ges_bow.joblib")
+ges_bow_trainer.train_model('data/processed/ges_bow_test_text.npz','data/processed/test_labels.txt','reports/ges_bow_best_model_results.txt', "models/ges_bow.joblib", "models/ges_bow_coef.json","data/processed/ges_bow_vocab.json")
 
 ges_bow_performance = Performance('reports/ges_bow_best_model_results.txt')
 ges_bow_performance.analyze()
