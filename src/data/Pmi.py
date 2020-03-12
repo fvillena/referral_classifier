@@ -39,33 +39,26 @@ class Pmi:
                 self.labels[line].append(i)
         
     def calculate(self,pmi_location):
+        bool_matrix = self.word_count_matrix.astype(bool)
+        Fw = np.asarray(bool_matrix.sum(axis=0)).reshape(-1)
+        Fd = bool_matrix.shape[0]
+        Pw = Fw / Fd
+        Fc_t = bool_matrix[self.labels["True"],:].shape[0]
+        Fc_f = bool_matrix[self.labels["False"],:].shape[0]
+        Pc_t = Fc_t / Fd
+        Pc_f = Fc_f / Fd
+        Fw_t = np.asarray(bool_matrix[self.labels["True"],:].sum(axis=0)).reshape(-1)
+        Pwc_t = Fw_t / Fd
+        Fw_f = np.asarray(bool_matrix[self.labels["False"],:].sum(axis=0)).reshape(-1)
+        Pwc_f = Fw_f / Fd
+        PMI_t = np.nan_to_num(np.log((Pwc_t) / (Pw*Pc_t)))
+        PMI_f = np.nan_to_num(np.log((Pwc_f) / (Pw*Pc_f)))
         self.PMI_values = {
-            "True": {},
-            "False": {}
+            "True": {word:float(PMI_t[idx]) for word,idx in self.vocab.items()},
+            "False": {word:float(PMI_f[idx]) for word,idx in self.vocab.items()}
         }
-        n = self.word_count_matrix.shape[0]
-        i = 0
-        sw = nltk.corpus.stopwords.words("spanish")
-        for word,idx in self.vocab.items():
-            if word in sw:
-                continue
-            #
-            c_rows = self.labels["True"]
-            elements = np.ix_(c_rows,[idx])
-            Pwc_t = self.word_count_matrix[elements].count_nonzero() / n
-            #
-            c_rows = self.labels["False"]
-            elements = np.ix_(c_rows,[idx])
-            Pwc_f = self.word_count_matrix[elements].count_nonzero() / n
-            #
-            Pw = self.word_count_matrix[:,idx].count_nonzero() / n
-            Pc = 0.5
-            self.PMI_values["True"][word] = PMI(Pwc_t,Pw,Pc)
-            self.PMI_values["False"][word] = PMI(Pwc_f,Pw,Pc)
-            logger.info("{} {} - true: {}, false: {}".format(i/len(self.vocab),word, Pwc_t,Pwc_f))
-            i+=1
-        self.PMI_values["True"] = {k: v for k, v in sorted(self.PMI_values["True"].items(), reverse = True, key=lambda item: item[1])}
-        self.PMI_values["False"] = {k: v for k, v in sorted(self.PMI_values["True"].items(), reverse = True, key=lambda item: item[1])}
+        self.PMI_values["True"] = {k: v for k, v in sorted(self.PMI_values["True"].items(), reverse = True, key=lambda item: item[1]) }
+        self.PMI_values["False"] = {k: v for k, v in sorted(self.PMI_values["False"].items(), reverse = True, key=lambda item: item[1]) }
         with open(pmi_location, 'w', encoding='utf-8') as json_file:
             json.dump(self.PMI_values, json_file, indent=2, ensure_ascii=False, cls=NpEncoder)
             
