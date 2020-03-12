@@ -19,7 +19,10 @@ class NpEncoder(json.JSONEncoder):
 
 
 def PMI(Pwc,Pw,Pc):
-    return np.log((Pwc)/(Pw*Pc))
+    try:
+        return np.log((Pwc)/(Pw*Pc))
+    except ZeroDivisionError:
+        return 0
 
 class Pmi:
     def __init__(self,word_count_matrix,vocab,labels):
@@ -59,7 +62,7 @@ class Pmi:
             Pc = 0.5
             self.PMI_values["True"][word] = PMI(Pwc_t,Pw,Pc)
             self.PMI_values["False"][word] = PMI(Pwc_f,Pw,Pc)
-            logger.info("{} {} - true: {}, false: {}".format(i/n,word, Pwc_t,Pwc_f))
+            logger.info("{} {} - true: {}, false: {}".format(i/len(self.vocab),word, Pwc_t,Pwc_f))
             i+=1
         self.PMI_values["True"] = {k: v for k, v in sorted(self.PMI_values["True"].items(), reverse = True, key=lambda item: item[1])}
         self.PMI_values["False"] = {k: v for k, v in sorted(self.PMI_values["True"].items(), reverse = True, key=lambda item: item[1])}
