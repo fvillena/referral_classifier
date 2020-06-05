@@ -56,6 +56,6 @@ class TextVectorizer:
         for i,sentence in enumerate(self.test_sentences):
             vector = to_vector(sentence,self.embedding,self.idf)
             self.test_matrix[i,] = vector
-    def write_data(self,prefix,vectorized_text_location):
-        np.save(vectorized_text_location + prefix + '_train_text.npy', self.train_matrix)
-        np.save(vectorized_text_location + prefix + '_test_text.npy', self.test_matrix)
+    def write_data(self,prefix,vectorized_text_location,embedding_name = "wl"):
+        np.save(vectorized_text_location + prefix + "_" + embedding_name + '_train_text.npy', self.train_matrix)
+        np.save(vectorized_text_location + prefix + "_" + embedding_name + '_test_text.npy', self.test_matrix)
